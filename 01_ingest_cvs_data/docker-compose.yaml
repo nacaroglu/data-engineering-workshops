@@ -1,0 +1,18 @@
+services:
+  ecommerce-db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root   
+      - MYSQL_DATABASE=ecommerce             
+    volumes:
+      - "./ecommerce_data:/var/lib/mysql:rw"
+    ports:
+      - "3306:3306"
+    networks:
+      - airflow
+    restart: always                   # Added for stability
+
+networks:
+  airflow:
+    external: true                    # Updated to newer syntax
+    name: airflow_default

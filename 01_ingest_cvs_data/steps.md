@@ -1,13 +1,13 @@
 
 1. Pull and run the image
 
-docker network create ecommerce-app
+docker network create airflow-default
 
 docker run --name ecommerce-db -d \
     -e MYSQL_ROOT_PASSWORD=root \
     -p 3306:3306 \
     -v $(pwd)/ecommerce_data:/var/lib/mysql \
-    --network ecommerce-app \
+    --network airflow-default\
     mysql:latest
 
 

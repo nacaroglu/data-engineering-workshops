@@ -172,3 +172,9 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+ecommerce_data/
+
+.terraform/
+
+.terraform.lock.hcl

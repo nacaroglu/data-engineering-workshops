@@ -1,0 +1,6 @@
+apache-airflow-providers-cncf-kubernetes
+boto3
+apache-airflow-providers-amazon
+PyMySQL
+apache-airflow-providers-snowflake
+apache-airflow-providers-amazon
