@@ -54,5 +54,5 @@
 
 7. Run Airflow DAG
 
-8. Validate Data
+8. Validate Data on Snowflake
 
