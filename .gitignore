@@ -178,3 +178,5 @@ ecommerce_data/
 .terraform/
 
 .terraform.lock.hcl
+
+airflow/logs/
