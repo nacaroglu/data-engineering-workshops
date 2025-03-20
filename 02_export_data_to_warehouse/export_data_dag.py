@@ -101,7 +101,7 @@ def create_stage():
 @task
 def import_to_snowflake(table_name):
     context = get_current_context()
-    stage_url = f"{SNOWFLAKE_STAGE}/ecommerce/{table_name}.parquet/"
+    stage_url = f"{SNOWFLAKE_STAGE}/ecommerce/{table_name}.parquet"
     print(f"Importing {table_name} to Snowflake...")
     print(f"Stage URL: {stage_url}")
     COPY_SQL = f"""
