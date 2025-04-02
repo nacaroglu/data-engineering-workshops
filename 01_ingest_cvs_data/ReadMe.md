@@ -1,6 +1,11 @@
+First step to create a MySQL DB and import some data for our e-commerce DB. 
+We are using this dataset: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 
-1. Pull and run the image
 
+
+1. Pull and run MySQL image in Docker
+
+```
 docker network create airflow-default
 
 docker run --name ecommerce-db -d \
@@ -9,22 +14,36 @@ docker run --name ecommerce-db -d \
     -v $(pwd)/ecommerce_data:/var/lib/mysql \
     --network airflow-default\
     mysql:latest
+```
 
+Login to container:
 
+```
 docker exec -it ecommerce-db bash
+```
 
-2. Create Database
 
+2. Create a new database
+
+Login to MySQL CLI
+```
 mysql -u root -p
+```
 
+Create and switch to database
+```
 create database ecommerce;
 
 use ecommerce;
+```
 
 3. Create tables
 
-run scripts one by one in schemas folder in mysql client application
+Run SQL Scripts one by one which are located in [schemas](schemas) folder against to MySQL CLI.
 
+Check created tables with below command:
+
+```
 mysql> show tables;
 +------------------------------------+
 | Tables_in_ecommerce                |
@@ -40,9 +59,11 @@ mysql> show tables;
 | sellers                            |
 +------------------------------------+
 9 rows in set (0.00 sec)
+```
 
-4. Create Virtual Enviroment & Install dependicies 
+4. Create Virtual Enviroment & Install dependicies for ingestion script
 
+```
 python3 -m venv .venv
 
 source .venv/bin/activate
@@ -51,11 +72,17 @@ pip3 install pandas
 pip3 install sqlalchemy
 pip install PyMySQL
 pip install cryptography
+```
 
-5. Run script
+5. Run ingestion script. CSV files located in [data](data) folder
 
-python ingest_csv.py --user root --password root --host localhost --port 3306 --db_name ecommerce 
+```
+python ingest_csv.py --user root --password root --host localhost --port 3306 --db_name ecommerce
+```
 
+Output of the script should be like:
+
+```
 Inserted 99224 rows into order_reviews
 Inserted 99441 rows into customers
 Inserted 32951 rows into products
@@ -79,29 +106,27 @@ Inserted 100000 rows into order_items
 Inserted 12650 rows into order_items
 All CSV files have been imported successfully!
 .venv➜  01_ingest_cvs_data git:(main) ✗ 
+```
 
 6. Check from MySQL DB
 
-01_ingest_cvs_data git:(main) ✗ docker exec -it ecommerce-db bash
+Login to container and start MySQL CLI
+
+```
+docker exec -it ecommerce-db bash
+```
+```
 bash-5.1# mysql -u root -p
-Enter password: 
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 13
-Server version: 9.2.0 MySQL Community Server - GPL
+```
 
-Copyright (c) 2000, 2025, Oracle and/or its affiliates.
 
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
+```
 mysql> use ecommerce
-Reading table information for completion of table and column names
-You can turn off this feature to get a quicker startup with -A
+```
 
-Database changed
+List tables to check
+
+```
 mysql> show tables;
 +------------------------------------+
 | Tables_in_ecommerce                |
@@ -118,7 +143,11 @@ mysql> show tables;
 | sellers                            |
 +------------------------------------+
 10 rows in set (0.01 sec)
+```
 
+Check some of the tables ingested correctly:
+
+```
 mysql> select count(1) from geolocation;
 +----------+
 | count(1) |
@@ -150,10 +179,4 @@ mysql> select count(1) from customers;
 |    99441 |
 +----------+
 1 row in set (0.03 sec)
-
-7. Dumb MySQL DB
-
-bash-5.1# mysqldump -u root  -p ecommerce  > ecommerce_export.sql
-
-cp ecommerce_export.sql /var/lib/mysql 
 
