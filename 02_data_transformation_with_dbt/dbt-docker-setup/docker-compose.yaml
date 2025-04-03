@@ -1,0 +1,12 @@
+version: '3'
+services:
+  dbt-snowflake-dtc:
+    build:
+      context: .
+      target: dbt-snowflake
+    image: dbt/snowflake
+    volumes:
+      - .:/usr/app
+      - ~/.dbt/:/root/.dbt/
+      - ~/.aws:/.aws
+    network_mode: host
